@@ -1,8 +1,6 @@
-# autenticacion_documentacion
-Repositorio para contener la documentación y diseños relacionados con los sistemas que intervienen en el proceso de notificacion de la Universidad Distrital, y la arquitectura y disposición asociada a dichos recursos.
+# notificacion_documentacion
+Repositorio para contener la documentación y diseños relacionados con el sistema transversal de notificaciones de la Universidad Distrital.
 
 # Diagramas arquitectura
 
-## Componentes
-
-![Diagrama](/diagramas/propuesta.png)
+![Diagrama](/diagramas/Propuesta.png)
