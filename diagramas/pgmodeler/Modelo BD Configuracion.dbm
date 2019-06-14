@@ -1,0 +1,530 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+CAUTION: Do not modify this file unless you know what you are doing.
+         Unexpected results may occur if the code is changed deliberately.
+-->
+<dbmodel pgmodeler-ver="0.9.2-alpha1" last-position="0,0" last-zoom="1" max-obj-count="26"
+	 default-schema="public" default-owner="postgres">
+<role name="test"
+      superuser="true"
+      inherit="true"
+      login="true"
+      encrypted="true"
+      password="********">
+</role>
+
+<role name="crud_user"
+      inherit="true"
+      login="true"
+      encrypted="true"
+      password="********">
+</role>
+
+<role name="coasverage_app"
+      inherit="true"
+      login="true"
+      encrypted="true"
+      password="********">
+</role>
+
+<database name="test" encoding="SQL_ASCII" lc-collate="C" lc-ctype="C" is-template="false" allow-conns="true">
+	<role name="test"/>
+	<tablespace name="pg_default"/>
+</database>
+
+<schema name="public" layer="0" rect-visible="true" fill-color="#e1e1e1" sql-disabled="true">
+</schema>
+
+<schema name="configuracion" layer="0" rect-visible="true" fill-color="#628861">
+	<role name="test"/>
+	<comment><![CDATA[Esquema que contiene la configuracion del nodo central]]></comment>
+</schema>
+
+<table name="perfil" layer="0" collapse-mode="2" max-obj-count="3">
+	<schema name="configuracion"/>
+	<role name="test"/>
+	<comment><![CDATA[Contiene la informacion de un perfil]]></comment>
+	<position x="180" y="660"/>
+	<column name="id" not-null="true" default-value="nextval('perfil_id_seq'::regclass)">
+		<type name="integer" length="0"/>
+		<comment><![CDATA[Identificador de un perfil]]></comment>
+	</column>
+	<column name="nombre" not-null="true">
+		<type name="character varying" length="50"/>
+		<comment><![CDATA[Nombre del perfil]]></comment>
+	</column>
+	<column name="aplicacion" not-null="true">
+		<type name="integer" length="0"/>
+		<comment><![CDATA[Contiene el id de la aplicacion asociada al perfil]]></comment>
+	</column>
+	<constraint name="PK_PERFIL" type="pk-constr" table="configuracion.perfil">
+		<columns names="id" ref-type="src-columns"/>
+		<comment><![CDATA[llave primaria de la tabla perfil]]></comment>
+	</constraint>
+</table>
+
+<table name="aplicacion" layer="0" collapse-mode="2" max-obj-count="8">
+	<schema name="configuracion"/>
+	<role name="test"/>
+	<comment><![CDATA[Tabla que se encarga de almacenar la informacion de cada aplicacion contenida en la base de datos]]></comment>
+	<position x="580" y="660"/>
+	<column name="id" not-null="true" default-value="nextval('aplicacion_id_seq'::regclass)">
+		<type name="integer" length="0"/>
+		<comment><![CDATA[Identificador unico de la tabla aplicacion]]></comment>
+	</column>
+	<column name="nombre" not-null="true">
+		<type name="character varying" length="100"/>
+		<comment><![CDATA[Nombre que identifica al aplicativo]]></comment>
+	</column>
+	<column name="descripcion" not-null="true">
+		<type name="text" length="0"/>
+		<comment><![CDATA[Descripcion detallada de las funcionalidades del aplicativo]]></comment>
+	</column>
+	<column name="dominio" not-null="true">
+		<type name="character varying" length="200"/>
+		<comment><![CDATA[Dominio o url de acceso publico del aplicativo]]></comment>
+	</column>
+	<column name="estado" default-value="true">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="alias">
+		<type name="character varying" length="100"/>
+		<comment><![CDATA[Dato que se presentará a cambio del nombre de la aplicación]]></comment>
+	</column>
+	<column name="estilo_icono">
+		<type name="character varying" length="100"/>
+		<comment><![CDATA[Valor de la clase css que referenciará el ícono]]></comment>
+	</column>
+	<constraint name="PK_APLICACION" type="pk-constr" table="configuracion.aplicacion">
+		<columns names="id" ref-type="src-columns"/>
+		<comment><![CDATA[Llave primaria de la tabla aplicacion]]></comment>
+	</constraint>
+	<constraint name="uq_aplicacion_nombre" type="uq-constr" table="configuracion.aplicacion">
+		<columns names="nombre" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="uq_aplicacion_dominio" type="uq-constr" table="configuracion.aplicacion">
+		<columns names="dominio" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="notificacion" layer="0" collapse-mode="2" max-obj-count="7">
+	<schema name="configuracion"/>
+	<role name="test"/>
+	<comment><![CDATA[Notificaciones de sistema a usuario centralizadas para todos los sistemas]]></comment>
+	<position x="520" y="60"/>
+	<column name="id" not-null="true" default-value="nextval('configuracion.notificacion_id_seq'::regclass)">
+		<type name="integer" length="0"/>
+		<comment><![CDATA[Identificador único de la notificación generada]]></comment>
+	</column>
+	<column name="fecha_creacion" not-null="true" default-value="now()">
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
+		<comment><![CDATA[Fecha y hora en la que se creó la notificación]]></comment>
+	</column>
+	<column name="estado_notificacion" not-null="true">
+		<type name="integer" length="0"/>
+		<comment><![CDATA[Estado en el que se encuentra la notificación]]></comment>
+	</column>
+	<column name="cuerpo_notificacion">
+		<type name="json" length="0"/>
+		<comment><![CDATA[Cuerpo de la notificación, será un objeto JSON en el que se almacenará el mensaje, título y otra información relevante]]></comment>
+	</column>
+	<column name="notificacion_configuracion" not-null="true">
+		<type name="integer" length="0"/>
+		<comment><![CDATA[Referencia a la configuracion de la notificacion generada]]></comment>
+	</column>
+	<column name="usuario">
+		<type name="character varying" length="50"/>
+		<comment><![CDATA[Usuario destino de una notificación]]></comment>
+	</column>
+	<constraint name="PK_notificacion" type="pk-constr" table="configuracion.notificacion">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="notificacion_estado" layer="0" collapse-mode="2" max-obj-count="7">
+	<schema name="configuracion"/>
+	<role name="test"/>
+	<comment><![CDATA[Centralización de los estados de las notificaciones de los sistemas]]></comment>
+	<position x="1140" y="20"/>
+	<column name="id" not-null="true" default-value="nextval('configuracion.notificacion_estado_id_seq'::regclass)">
+		<type name="integer" length="0"/>
+		<comment><![CDATA[Identificador único del estado de la notificación]]></comment>
+	</column>
+	<column name="nombre">
+		<type name="character varying" length="100"/>
+		<comment><![CDATA[Nombre del estado de la notificación]]></comment>
+	</column>
+	<column name="codigo_abreviacion">
+		<type name="character varying" length="20"/>
+		<comment><![CDATA[Código de abreviación del estado de la notificación]]></comment>
+	</column>
+	<column name="descripcion">
+		<type name="character varying" length="250"/>
+		<comment><![CDATA[Descripción del estado de notificación]]></comment>
+	</column>
+	<column name="activo" default-value="true">
+		<type name="boolean" length="0"/>
+		<comment><![CDATA[indicador de si el registro se encuentra en estado activo]]></comment>
+	</column>
+	<column name="numero_orden">
+		<type name="numeric" length="5" precision="2"/>
+		<comment><![CDATA[Orden de los estados de notificación]]></comment>
+	</column>
+	<constraint name="PK_notificacion_estado" type="pk-constr" table="configuracion.notificacion_estado">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="notificacion_tipo" layer="0" collapse-mode="2" max-obj-count="2">
+	<schema name="configuracion"/>
+	<role name="test"/>
+	<comment><![CDATA[Centralización de los tipo de las notificaciones de los sistemas]]></comment>
+	<position x="1020" y="540"/>
+	<column name="id" not-null="true" default-value="nextval('configuracion.notificacion_tipo_id_seq'::regclass)">
+		<type name="integer" length="0"/>
+		<comment><![CDATA[Identificador único del tipo de la notificación]]></comment>
+	</column>
+	<column name="nombre">
+		<type name="character varying" length="100"/>
+		<comment><![CDATA[Nombre del tipo de la notificación]]></comment>
+	</column>
+	<constraint name="PK_notificacion_tipo" type="pk-constr" table="configuracion.notificacion_tipo">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="notificacion_configuracion" layer="0" collapse-mode="2" max-obj-count="7">
+	<schema name="configuracion"/>
+	<role name="test"/>
+	<comment><![CDATA[Configuracion de las notificaciones que seran emitidas]]></comment>
+	<position x="560" y="380"/>
+	<column name="id" not-null="true" default-value="nextval('configuracion.notificacion_configuracion_id_seq'::regclass)">
+		<type name="integer" length="0"/>
+		<comment><![CDATA[Identificador único de la configuracion generada]]></comment>
+	</column>
+	<column name="end_point" not-null="true">
+		<type name="character varying" length="0"/>
+		<comment><![CDATA[end_point del api que genera la notificacion]]></comment>
+	</column>
+	<column name="metodo_http" not-null="true">
+		<type name="integer" length="0"/>
+		<comment><![CDATA[Metodo http de la peticion que genera la notificación]]></comment>
+	</column>
+	<column name="tipo" not-null="true">
+		<type name="integer" length="0"/>
+		<comment><![CDATA[tipo de notificación]]></comment>
+	</column>
+	<column name="cuerpo_notificacion" not-null="true">
+		<type name="json" length="0"/>
+		<comment><![CDATA[cuerpo de la notificacion (configuracion para mostrar en cliente y plantilla de mensaje)]]></comment>
+	</column>
+	<column name="aplicacion" not-null="true">
+		<type name="integer" length="0"/>
+		<comment><![CDATA[Aplicacion que genera la notificacion]]></comment>
+	</column>
+	<constraint name="pk_notificacion_configuracion" type="pk-constr" table="configuracion.notificacion_configuracion">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="metodo_http" layer="0" collapse-mode="2" max-obj-count="3">
+	<schema name="configuracion"/>
+	<role name="test"/>
+	<comment><![CDATA[Tipos de metodo http usados]]></comment>
+	<position x="1000" y="700"/>
+	<column name="id" not-null="true" default-value="nextval('configuracion.metodo_http_id_seq'::regclass)">
+		<type name="integer" length="0"/>
+		<comment><![CDATA[Identificador único de la tabla]]></comment>
+	</column>
+	<column name="nombre" not-null="true">
+		<type name="character varying" length="0"/>
+		<comment><![CDATA[Identificador único de la configuracion generada]]></comment>
+	</column>
+	<column name="descripcion" not-null="true">
+		<type name="character varying" length="0"/>
+		<comment><![CDATA[Identificador único de la configuracion generada]]></comment>
+	</column>
+	<constraint name="pk_metodo_http" type="pk-constr" table="configuracion.metodo_http">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="notificacion_configuracion_perfil" layer="0" collapse-mode="2" max-obj-count="3">
+	<schema name="configuracion"/>
+	<role name="test"/>
+	<comment><![CDATA[Tipos de metodo http usados]]></comment>
+	<position x="40" y="400"/>
+	<column name="id" not-null="true" default-value="nextval('configuracion.notificacion_configuracion_perfil_id_seq'::regclass)">
+		<type name="integer" length="0"/>
+		<comment><![CDATA[Identificador único de la tabla]]></comment>
+	</column>
+	<column name="notificacion_configuracion" not-null="true">
+		<type name="integer" length="0"/>
+		<comment><![CDATA[Referencia a la configuracion de la notificacion]]></comment>
+	</column>
+	<column name="perfil" not-null="true">
+		<type name="integer" length="0"/>
+		<comment><![CDATA[referencia al perfil que debe recibir la notificacion]]></comment>
+	</column>
+	<constraint name="pk_notificacion_configuracion_perfil" type="pk-constr" table="configuracion.notificacion_configuracion_perfil">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="notificacion_estado_usuario" layer="0" collapse-mode="2" max-obj-count="7">
+	<schema name="configuracion"/>
+	<role name="test"/>
+	<position x="1040" y="280"/>
+	<column name="id" not-null="true" default-value="nextval('configuracion.notificacion_estado_usuario_id_seq'::regclass)">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="notificacion" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="notificacion_estado" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="fecha" not-null="true">
+		<type name="timestamp" length="0"/>
+	</column>
+	<column name="usuario">
+		<type name="character varying" length="100"/>
+	</column>
+	<column name="activo" default-value="true">
+		<type name="boolean" length="0"/>
+	</column>
+	<constraint name="pk_notificacion_estado_usuario" type="pk-constr" table="configuracion.notificacion_estado_usuario">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<constraint name="FK_PERFIL_APP" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="CASCADE" del-action="RESTRICT" ref-table="configuracion.aplicacion" table="configuracion.perfil">
+	<columns names="aplicacion" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="FK_notificacion_estado_notificacion_estado" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="RESTRICT" del-action="RESTRICT" ref-table="configuracion.notificacion_estado" table="configuracion.notificacion">
+	<columns names="estado_notificacion" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="fk_notificacion_notificacion_configuracion" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="configuracion.notificacion_configuracion" table="configuracion.notificacion">
+	<columns names="notificacion_configuracion" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="fk_configuracion_notificacion_metodo_http" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="configuracion.metodo_http" table="configuracion.notificacion_configuracion">
+	<columns names="metodo_http" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="fk_notificacion_configuracion_notificacion_tipo" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="configuracion.notificacion_tipo" table="configuracion.notificacion_configuracion">
+	<columns names="tipo" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="fk_notificacion_configuracion_aplicacion" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="configuracion.aplicacion" table="configuracion.notificacion_configuracion">
+	<columns names="aplicacion" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="fk_notificacion_configuracion_perfil_notificacion_configuracion" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="configuracion.notificacion_configuracion" table="configuracion.notificacion_configuracion_perfil">
+	<columns names="notificacion_configuracion" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="fk_notificacion_configuracion_perfil_perfil" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="configuracion.perfil" table="configuracion.notificacion_configuracion_perfil">
+	<columns names="perfil" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="fk_notificacion_estado_usuario_notificacion" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="configuracion.notificacion" table="configuracion.notificacion_estado_usuario">
+	<columns names="notificacion" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="fk_notificacion_estado_usuario_notificacion_estado" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="configuracion.notificacion_estado" table="configuracion.notificacion_estado_usuario">
+	<columns names="notificacion_estado" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<relationship name="rel_perfil_aplicacion" type="relfk" layer="0"
+	 custom-color="#242ac8"
+	 src-table="configuracion.perfil"
+	 dst-table="configuracion.aplicacion" reference-fk="FK_PERFIL_APP"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_notificacion_notificacion_estado" type="relfk" layer="0"
+	 custom-color="#c63932"
+	 src-table="configuracion.notificacion"
+	 dst-table="configuracion.notificacion_estado" reference-fk="FK_notificacion_estado_notificacion_estado"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_notificacion_notificacion_configuracion" type="relfk" layer="0"
+	 custom-color="#6e1288"
+	 src-table="configuracion.notificacion"
+	 dst-table="configuracion.notificacion_configuracion" reference-fk="fk_notificacion_notificacion_configuracion"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_notificacion_configuracion_metodo_http" type="relfk" layer="0"
+	 custom-color="#21bf5b"
+	 src-table="configuracion.notificacion_configuracion"
+	 dst-table="configuracion.metodo_http" reference-fk="fk_configuracion_notificacion_metodo_http"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_notificacion_configuracion_notificacion_tipo" type="relfk" layer="0"
+	 custom-color="#5e3ffd"
+	 src-table="configuracion.notificacion_configuracion"
+	 dst-table="configuracion.notificacion_tipo" reference-fk="fk_notificacion_configuracion_notificacion_tipo"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_notificacion_configuracion_aplicacion" type="relfk" layer="0"
+	 custom-color="#b131da"
+	 src-table="configuracion.notificacion_configuracion"
+	 dst-table="configuracion.aplicacion" reference-fk="fk_notificacion_configuracion_aplicacion"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_notificacion_configuracion_perfil_notificacion_configuracio" type="relfk" layer="0"
+	 custom-color="#514973"
+	 src-table="configuracion.notificacion_configuracion_perfil"
+	 dst-table="configuracion.notificacion_configuracion" reference-fk="fk_notificacion_configuracion_perfil_notificacion_configuracion"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_notificacion_configuracion_perfil_perfil" type="relfk" layer="0"
+	 custom-color="#fa9aea"
+	 src-table="configuracion.notificacion_configuracion_perfil"
+	 dst-table="configuracion.perfil" reference-fk="fk_notificacion_configuracion_perfil_perfil"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_notificacion_estado_usuario_notificacion" type="relfk" layer="0"
+	 custom-color="#5be2eb"
+	 src-table="configuracion.notificacion_estado_usuario"
+	 dst-table="configuracion.notificacion" reference-fk="fk_notificacion_estado_usuario_notificacion"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_notificacion_estado_usuario_notificacion_estado" type="relfk" layer="0"
+	 custom-color="#decc45"
+	 src-table="configuracion.notificacion_estado_usuario"
+	 dst-table="configuracion.notificacion_estado" reference-fk="fk_notificacion_estado_usuario_notificacion_estado"
+	 src-required="false" dst-required="false"/>
+
+<permission>
+	<object name="test" type="database"/>
+	<privileges connect="true" temporary="true"/>
+</permission>
+<permission>
+	<object name="test" type="database"/>
+	<roles names="test"/>
+	<privileges create="true" connect="true" temporary="true"/>
+</permission>
+<permission>
+	<object name="test" type="database"/>
+	<roles names="crud_user"/>
+	<privileges connect="true" temporary="true"/>
+</permission>
+<permission>
+	<object name="test" type="database"/>
+	<roles names="coasverage_app"/>
+	<privileges connect="true" temporary="true"/>
+</permission>
+<permission>
+	<object name="configuracion" type="schema"/>
+	<roles names="test"/>
+	<privileges create="true" usage="true"/>
+</permission>
+<permission>
+	<object name="configuracion" type="schema"/>
+	<roles names="crud_user"/>
+	<privileges usage="true"/>
+</permission>
+<permission>
+	<object name="configuracion.perfil" type="table"/>
+	<roles names="test"/>
+	<privileges select="true" delete="true" insert="true" update="true" truncate="true" references="true" trigger="true"/>
+</permission>
+<permission>
+	<object name="configuracion.perfil" type="table"/>
+	<roles names="crud_user"/>
+	<privileges select="true" delete="true" insert="true" update="true"/>
+</permission>
+<permission>
+	<object name="configuracion.aplicacion" type="table"/>
+	<roles names="test"/>
+	<privileges select="true" delete="true" insert="true" update="true" truncate="true" references="true" trigger="true"/>
+</permission>
+<permission>
+	<object name="configuracion.aplicacion" type="table"/>
+	<roles names="crud_user"/>
+	<privileges select="true" delete="true" insert="true" update="true"/>
+</permission>
+<permission>
+	<object name="configuracion.notificacion" type="table"/>
+	<roles names="test"/>
+	<privileges select="true" delete="true" insert="true" update="true" truncate="true" references="true" trigger="true"/>
+</permission>
+<permission>
+	<object name="configuracion.notificacion" type="table"/>
+	<roles names="crud_user"/>
+	<privileges select="true" delete="true" insert="true" update="true"/>
+</permission>
+<permission>
+	<object name="configuracion.notificacion_estado" type="table"/>
+	<roles names="test"/>
+	<privileges select="true" delete="true" insert="true" update="true" truncate="true" references="true" trigger="true"/>
+</permission>
+<permission>
+	<object name="configuracion.notificacion_estado" type="table"/>
+	<roles names="crud_user"/>
+	<privileges select="true" delete="true" insert="true" update="true"/>
+</permission>
+<permission>
+	<object name="configuracion.notificacion_tipo" type="table"/>
+	<roles names="test"/>
+	<privileges select="true" delete="true" insert="true" update="true" truncate="true" references="true" trigger="true"/>
+</permission>
+<permission>
+	<object name="configuracion.notificacion_tipo" type="table"/>
+	<roles names="crud_user"/>
+	<privileges select="true" delete="true" insert="true" update="true"/>
+</permission>
+<permission>
+	<object name="configuracion.notificacion_configuracion" type="table"/>
+	<roles names="test"/>
+	<privileges select="true" delete="true" insert="true" update="true" truncate="true" references="true" trigger="true"/>
+</permission>
+<permission>
+	<object name="configuracion.notificacion_configuracion" type="table"/>
+	<roles names="crud_user"/>
+	<privileges select="true" delete="true" insert="true" update="true"/>
+</permission>
+<permission>
+	<object name="configuracion.metodo_http" type="table"/>
+	<roles names="test"/>
+	<privileges select="true" delete="true" insert="true" update="true" truncate="true" references="true" trigger="true"/>
+</permission>
+<permission>
+	<object name="configuracion.metodo_http" type="table"/>
+	<roles names="crud_user"/>
+	<privileges select="true" delete="true" insert="true" update="true"/>
+</permission>
+<permission>
+	<object name="configuracion.notificacion_configuracion_perfil" type="table"/>
+	<roles names="test"/>
+	<privileges select="true" delete="true" insert="true" update="true" truncate="true" references="true" trigger="true"/>
+</permission>
+<permission>
+	<object name="configuracion.notificacion_configuracion_perfil" type="table"/>
+	<roles names="crud_user"/>
+	<privileges select="true" delete="true" insert="true" update="true"/>
+</permission>
+</dbmodel>

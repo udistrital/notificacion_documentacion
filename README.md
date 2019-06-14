@@ -4,3 +4,7 @@ Repositorio para contener la documentación y diseños relacionados con el siste
 # Diagramas arquitectura
 
 ![Diagrama](/diagramas/Propuesta.png)
+
+# Modelo BD Configuracion
+
+![Diagrama](/diagramas/Modelo BD Configuracion.png)
