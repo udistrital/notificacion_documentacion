@@ -7,4 +7,4 @@ Repositorio para contener la documentación y diseños relacionados con el siste
 
 # Modelo BD Configuracion
 
-![Diagrama](/diagramas/Modelo BD Configuracion.png)
+![Diagrama](/diagramas/ModeloBDConfiguracion.png)
